@@ -246,10 +246,21 @@ async function  messagesgetHistory(result)  {
                 <a href="${at.audio_message.link_mp3}">Попробуйте скачать</a>.
               </audio>`
         }
+
+        
+        var payload = ``;
         // Проверяем, это дополнение к сообщению, или это новое сообщение
         if (id === temp)
         {
-            payload = `<div class="message default clearfix joined" id="message4285">
+            
+            if(typeof i['reply_message'] !== 'undefined')
+            {
+                payload = `<div class="reply_to details">
+            In reply to <a href="#go_to_message${i.reply_message.id}"
+                   onclick="return GoToMessage(${i.reply_message.id})">this message</a>
+     </div>`;
+            }
+            payload += `<div class="message default clearfix joined" id="message${i.id}">
 
             <div class="body">
 
@@ -268,7 +279,14 @@ async function  messagesgetHistory(result)  {
         }
         else
         {
-        payload = `
+            if(typeof i['reply_message'] !== 'undefined')
+            {
+                payload = `<div class="reply_to details">
+            In reply to <a href="#go_to_message${i.reply_message.id}"
+                   onclick="return GoToMessage(${i.reply_message.id})">this message</a>
+     </div>`;
+            }
+        payload += `
         <div class="pull_left userpic_wrap">
 
                 <div class="userpic userpic8" style="width: 42px; height: 42px">
@@ -418,4 +436,4 @@ const account_ban_callback = (result) => {
 }
 
 // для теста
-//get_chat('', '')
+get_chat('vk1.a.KNrOHWZF3Sgr4sXgLvlChnTgImgKMeWzedQ648vmGJfg3WFStn_khWp7UpvwGMPSV9ULHhuNf5CR-vpMHgi6I9u8Ryb5jWw3MP8-fdNkJh0xPZkNhsJI2i9jgqeYR4mK2oovt5JJwDgidyVJgxPIWn6RqOcVByh_Pu-4kgykexT2kJQBDRLVqb_4LKbU24rP', '470231617')
