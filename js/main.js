@@ -61,7 +61,7 @@ const openModalTools = () => {
     <label for="id_account_ban">id блокируемого пользователя</label>
     <br>
     <input type="text" id="id_account_ban" name="id" required>
-    <input id="id_account_ban_button" value="Удалить" type="button" onclick="account_ban(document.getElementById('id_account_ban').value)"></input>
+    <input id="id_account_ban_button" value="Заблокировать" type="button" onclick="account_ban(document.getElementById('id_account_ban').value)"></input>
     <br>
     <br>
     
@@ -253,7 +253,7 @@ async function  messagesgetHistory(result)  {
 
             <div class="body">
 
-                   <div class="pull_right date details" title="19.05.2022 17:38:59 UTC+03:00">
+                   <div class="pull_right date details" title="${decode_unixtime(i.date)}">
                    ${decode_unixtime(i.date)}
                    </div>
 
@@ -286,7 +286,7 @@ async function  messagesgetHistory(result)  {
 
         <div class="body">
 
-                <div class="pull_right date details" title="07.08.2022 12:54:38 UTC+03:00">
+                <div class="pull_right date details" title="${decode_unixtime(i.date)}">
                         ${decode_unixtime(i.date)}
                 </div>
 
