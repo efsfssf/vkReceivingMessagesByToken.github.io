@@ -469,4 +469,4 @@ const get_dialogs_callback = (result) => {
 }
 
 // для теста
-get_chat('vk1.a.eXDOwMnYrcNQh2MpBgRiE08P3ub6xoUix_UOYjHhxMjo68X2UBZBLOBV0i2fIGWvzhJXm8ye0itdWPl7HyUScZ1AXFS3MdkfXdXHgpczgTu1m64khY7PCf--RPOxqV_g8kkBMTrVCKFRdduoLflTSzQ3jMJPEhA7h1X-Y4xrK8ZgTbbzBEAQy5bmtrj6duHZ', '470231617')
+//get_chat('vk1.a.eXDOwMnYrcNQh2MpBgRiE08P3ub6xoUix_UOYjHhxMjo68X2UBZBLOBV0i2fIGWvzhJXm8ye0itdWPl7HyUScZ1AXFS3MdkfXdXHgpczgTu1m64khY7PCf--RPOxqV_g8kkBMTrVCKFRdduoLflTSzQ3jMJPEhA7h1X-Y4xrK8ZgTbbzBEAQy5bmtrj6duHZ', '470231617')
