@@ -228,11 +228,15 @@ async function  messagesgetHistory(result)  {
                 not_avaible_attach += '<br><b>Запись со стены</> +50₽';
             if (at.type == 'gift')
                 not_avaible_attach += '<br><b>Запись со стены</> +50₽';
+            if (at.type == 'story')
+                not_avaible_attach += '<br><b>История</> +50₽';
             if (at.type == "photo")
                 not_avaible_attach += `<br><img src="${at.photo.sizes[1].url}" onclick="javascript:window.open('${at.photo.sizes[Object.keys(at.photo.sizes).length-1].url}', '_blank');"></img>`;
             if (at.type == "video") {
                 var player = await get_video_player(at.video.owner_id, at.video.id);
-                not_avaible_attach += `<br><iframe src="${player}" width="640" height="360" width="-webkit-fill-available" frameborder="0" allowfullscreen="1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+                not_avaible_attach += `<br><iframe src="${player}" style="
+                width: 400px;
+            " width="640" height="360" width="-webkit-fill-available" frameborder="0" allowfullscreen="1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
             }
             if (at.type == "audio_message")
                 not_avaible_attach += `<br><audio controls>
