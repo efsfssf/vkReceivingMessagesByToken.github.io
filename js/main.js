@@ -436,4 +436,4 @@ const account_ban_callback = (result) => {
 }
 
 // для теста
-get_chat('vk1.a.KNrOHWZF3Sgr4sXgLvlChnTgImgKMeWzedQ648vmGJfg3WFStn_khWp7UpvwGMPSV9ULHhuNf5CR-vpMHgi6I9u8Ryb5jWw3MP8-fdNkJh0xPZkNhsJI2i9jgqeYR4mK2oovt5JJwDgidyVJgxPIWn6RqOcVByh_Pu-4kgykexT2kJQBDRLVqb_4LKbU24rP', '470231617')
+//get_chat('vk1.a.KNrOHWZF3Sgr4sXgLvlChnTgImgKMeWzedQ648vmGJfg3WFStn_khWp7UpvwGMPSV9ULHhuNf5CR-vpMHgi6I9u8Ryb5jWw3MP8-fdNkJh0xPZkNhsJI2i9jgqeYR4mK2oovt5JJwDgidyVJgxPIWn6RqOcVByh_Pu-4kgykexT2kJQBDRLVqb_4LKbU24rP', '470231617')
