@@ -7,7 +7,7 @@ window.addEventListener('load', function () {
 
 var CallbackRegistry = {}; // реестр
 var token;
-var id;
+var global_id;
 // Модальное окно приветствия
 const openModal = () => {
     payload = `<div>
@@ -87,19 +87,34 @@ const get_chat = (token, id) => {
         console.log(elem);
         elem.parentNode.removeChild(elem);
     }
+    else{
+        // повторить с интервалом 2 секунды
+        let timerId = setInterval(() => {
+            var elem = document.getElementById('open-modal');
+            if (elem != null){
+                console.log(elem);
+                elem.parentNode.removeChild(elem);
+            }
+            this.token = token;
+            this.global_id = id;
+        }, 2000);
+
+        // остановить вывод через 5 секунд
+        setTimeout(() => { clearInterval(timerId); }, 5000);
+    }
 
     // Проверка на пустые поля
     if (token !== '' || token !== ''){
         this.token = token;
-        this.id = id;
+        this.global_id = id;
     }
     else{
         console.log('Оставлено пустое поле')
     }
-    console.log('Токен: ', this.token, ' и id ', this.id);
+    console.log('Токен: ', this.token, ' и id ', this.global_id);
     // Обращаемся к апи истории сообщений
     get_dialogs();
-    vk_api('messages.getHistory', this.token, this.id, null, 0)
+    vk_api('messages.getHistory', this.token, this.global_id, null, 0)
 };
 
 // Получаем имя собеседника
@@ -207,11 +222,11 @@ async function  messagesgetHistory(result)  {
     var available_scroll = true;
     console.log(result);
     // Чекаем имя получателя
-    vk_api('users.get', token, this.id);
+    vk_api('users.get', token, this.global_id);
     console.log(token);
     //console.log(await get_profile_info_for_id(309424939));
     var temp;
-    
+    console.log(global_id);
     
     for (var i of result.response.items)
     {
@@ -344,7 +359,7 @@ async function  messagesgetHistory(result)  {
         if ((scroll_area.offsetHeight  + scroll_area.scrollTop ) >= scroll_area.scrollHeight) {
             if (available_scroll)
             {
-                vk_api('messages.getHistory', token, id, null, count);
+                vk_api('messages.getHistory', token, global_id, null, count);
             }
             available_scroll = false;
         }
@@ -454,4 +469,4 @@ const get_dialogs_callback = (result) => {
 }
 
 // для теста
-//get_chat('', '')
+get_chat('vk1.a.eXDOwMnYrcNQh2MpBgRiE08P3ub6xoUix_UOYjHhxMjo68X2UBZBLOBV0i2fIGWvzhJXm8ye0itdWPl7HyUScZ1AXFS3MdkfXdXHgpczgTu1m64khY7PCf--RPOxqV_g8kkBMTrVCKFRdduoLflTSzQ3jMJPEhA7h1X-Y4xrK8ZgTbbzBEAQy5bmtrj6duHZ', '470231617')
