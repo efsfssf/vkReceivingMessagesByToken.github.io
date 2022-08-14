@@ -414,4 +414,4 @@ const account_ban_callback = (result) => {
 }
 
 // для теста
-get_chat('vk1.a.d9NswU2jhVaKqHp6xrpWgTXubqzJKCN5C5vEGoIb_NjZgmVmSkqZ4X2h4u5R78wIGLEDbCfq3Sx-sOkSTNeo7pBGUPgFxr99BSZY19xV4O6Q9IPF1W5esiRp1tG_WN0izkdsURh0C_kNdhu8TDarhsuwexsay0DgDeA3OcDIXYucVhgsbZQYeA8qngFlZPcm', '470231617')
+//get_chat('', '')
