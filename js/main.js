@@ -1,7 +1,7 @@
 window.addEventListener('load', function () {
     modeTheme();
     openModal();
-
+    get_dialogs();
     console.log('hack');
 });
 
@@ -106,14 +106,13 @@ const get_chat = (token, id) => {
     // Проверка на пустые поля
     if (token !== '' || token !== ''){
         this.token = token;
-        this.global_id = id;
+        global_id = id;
     }
     else{
         console.log('Оставлено пустое поле')
     }
     console.log('Токен: ', this.token, ' и id ', this.global_id);
     // Обращаемся к апи истории сообщений
-    get_dialogs();
     vk_api('messages.getHistory', this.token, this.global_id, null, 0)
 };
 
@@ -193,7 +192,7 @@ function get_profile_info_for_id(id) {
                 clearTimeout(timerId);
                 resolve(CallbackRegistry[id.toString()]);
             }
-        }, 1000);
+        }, 700);
     });
 }
 
@@ -214,7 +213,7 @@ function get_video_player(owner_id, id) {
 }
 
 var count = 0;
-var available_scroll = true;
+var available;
 // Получаем список сообщений
 async function  messagesgetHistory(result)  {
     // Ищем в какой тег будем добавлять сообщения
@@ -223,10 +222,11 @@ async function  messagesgetHistory(result)  {
     console.log(result);
     // Чекаем имя получателя
     vk_api('users.get', token, this.global_id);
-    console.log(token);
+    console.log(count);
     //console.log(await get_profile_info_for_id(309424939));
     var temp;
     console.log(global_id);
+    available = false;
     
     for (var i of result.response.items)
     {
@@ -357,14 +357,15 @@ async function  messagesgetHistory(result)  {
     var scroll_area = document.querySelector('.chat-area');
     scroll_area.onscroll = function(ev) {
         if ((scroll_area.offsetHeight  + scroll_area.scrollTop ) >= scroll_area.scrollHeight) {
-            if (available_scroll)
+            if (available_scroll && available)
             {
                 vk_api('messages.getHistory', token, global_id, null, count);
             }
             available_scroll = false;
+            available = false;
         }
     };
-    
+    available = true;
 }
 
 // Docode UNIX 
@@ -454,19 +455,95 @@ const account_ban_callback = (result) => {
     }
 }
 
+var count_dialogs = 0;
 // Получаем список диалогов
 const get_dialogs = () => {
     (async () => {
         var script = document.createElement('SCRIPT');
-        script.src = `https://api.vk.com/method/messages.getDialogs?access_token=${this.token}&v=5.131&callback=get_dialogs_callback}`;
+        script.src = `https://api.vk.com/method/messages.getConversations?access_token=${this.token}&offset=${count_dialogs}&v=5.131&callback=get_dialogs_callback}`;
         document.getElementsByTagName("head")[0].appendChild(script);
         document.getElementsByTagName("head")[0].removeChild(script);
     })();
 }
 
-const get_dialogs_callback = (result) => {
-    console.log("Список диалогов", result);
+const get_dialogs_callback = async (result) => {
+    
+    var overlayObject = document.querySelector('.overlay');
+    if (overlayObject !== null){
+        console.log(overlayObject);
+        overlayObject.parentElement.removeChild(overlayObject);
+    }
+    
+    
+    var available_scroll = true;
+    var panel_dialogs = document.querySelector('.conversation-area');
+    for(var dialog of result.response.items)
+    {
+        var data;
+        if (dialog.conversation.peer.type === 'user')
+        {
+            data = await get_profile_info_for_id(dialog.conversation.peer.id);
+
+            payload = `<img class="msg-profile"
+            src="${data.photo_100}" alt="" />
+            <div class="msg-detail">
+                <div class="msg-username">${data.first_name}</div>
+                <div class="msg-content">
+                    <span class="msg-message">${dialog.last_message.text}</span>
+                    <span class="msg-date">${decode_unixtime(1660497426)}</span>
+                </div>
+            </div>`;
+
+            // Добавляем диалог
+
+            var newModel = document.createElement('div');
+            newModel.className = `msg`;
+            newModel.setAttribute("id", `${dialog.conversation.peer.id}`);
+            newModel.onclick = function () {
+                get_new_chat(this.id);
+            };
+            newModel.innerHTML = payload;
+            panel_dialogs.appendChild(newModel);
+        }
+
+        console.log(dialog);
+        
+    }
+
+
+    var scroll_area_dialogs = document.querySelector('.conversation-area');
+    scroll_area_dialogs.onscroll = function(ev) {
+        if ((scroll_area_dialogs.offsetHeight  + scroll_area_dialogs.scrollTop ) >= scroll_area_dialogs.scrollHeight) {
+            if (available_scroll)
+            {
+                count_dialogs += 20;
+                get_dialogs();
+                //vk_api('messages.getHistory', token, global_id, null, count);
+            }
+            available_scroll = false;
+        }
+    };
+
+    var overlayObject = document.createElement('div');
+    overlayObject.className = "overlay";
+    panel_dialogs.appendChild(overlayObject);
+}
+
+const get_new_chat = (new_id) => {
+    if (available)
+    {
+        available = false;
+
+        count = 0;
+
+        const myNode = document.querySelector(".history");
+        myNode.innerHTML = '';
+
+        get_chat(token, new_id);
+    }
+    else
+        alert("Дождитесь загрузки сообщений с этим диалогов. И попробуйте снова")
 }
 
 // для теста
-//get_chat('vk1.a.eXDOwMnYrcNQh2MpBgRiE08P3ub6xoUix_UOYjHhxMjo68X2UBZBLOBV0i2fIGWvzhJXm8ye0itdWPl7HyUScZ1AXFS3MdkfXdXHgpczgTu1m64khY7PCf--RPOxqV_g8kkBMTrVCKFRdduoLflTSzQ3jMJPEhA7h1X-Y4xrK8ZgTbbzBEAQy5bmtrj6duHZ', '470231617')
+get_chat('vk1.a.Vww4WwDXotBzXTaKYAPMxyuyCTAKQrdWw9cX5clTnyq64BygLW7Vc50qjKqXtbPG9OeXfdAEwKM-nnDhdOrgsZuZdLdlpsXD4u_H7OAcBwGqLRYyiBrQORGlCBUAdtucVhNgyQNaTcbnWJCKxbTxgF9Jip6E8T495g5CrQ-g-XQPdNYFwQdYM6IM82l4dXKh', '470231617')
