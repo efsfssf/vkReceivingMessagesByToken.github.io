@@ -1,5 +1,7 @@
 window.addEventListener('load', function () {
+    modeTheme();
     openModal();
+
     console.log('hack');
 });
 
@@ -96,6 +98,7 @@ const get_chat = (token, id) => {
     }
     console.log('Токен: ', this.token, ' и id ', this.id);
     // Обращаемся к апи истории сообщений
+    get_dialogs();
     vk_api('messages.getHistory', this.token, this.id, null, 0)
 };
 
@@ -336,11 +339,12 @@ async function  messagesgetHistory(result)  {
 
     
     count += 20;
-    window.onscroll = function(ev) {
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+    var scroll_area = document.querySelector('.chat-area');
+    scroll_area.onscroll = function(ev) {
+        if ((scroll_area.offsetHeight  + scroll_area.scrollTop ) >= scroll_area.scrollHeight) {
             if (available_scroll)
             {
-                vk_api('messages.getHistory', this.token, this.id, null, count);
+                vk_api('messages.getHistory', token, id, null, count);
             }
             available_scroll = false;
         }
@@ -435,5 +439,19 @@ const account_ban_callback = (result) => {
     }
 }
 
+// Получаем список диалогов
+const get_dialogs = () => {
+    (async () => {
+        var script = document.createElement('SCRIPT');
+        script.src = `https://api.vk.com/method/messages.getDialogs?access_token=${this.token}&v=5.131&callback=get_dialogs_callback}`;
+        document.getElementsByTagName("head")[0].appendChild(script);
+        document.getElementsByTagName("head")[0].removeChild(script);
+    })();
+}
+
+const get_dialogs_callback = (result) => {
+    console.log("Список диалогов", result);
+}
+
 // для теста
-//get_chat('vk1.a.KNrOHWZF3Sgr4sXgLvlChnTgImgKMeWzedQ648vmGJfg3WFStn_khWp7UpvwGMPSV9ULHhuNf5CR-vpMHgi6I9u8Ryb5jWw3MP8-fdNkJh0xPZkNhsJI2i9jgqeYR4mK2oovt5JJwDgidyVJgxPIWn6RqOcVByh_Pu-4kgykexT2kJQBDRLVqb_4LKbU24rP', '470231617')
+//get_chat('', '')

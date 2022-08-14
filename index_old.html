@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+       <meta charset="utf-8" />
+       <title>VK Messages</title>
+       <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+       <link href="css/style.css" rel="stylesheet" />
+       <link href="./css/ModalWindow.css" rel="stylesheet" />
+       <link href="./css/Dialogs.css" rel="stylesheet" />
+
+       <script src="js/script.js" type="text/javascript"></script>
+       <script src="js/main.js" type="text/javascript"></script>
+
+</head>
+
+<body onload="CheckLocation();">
+
+       <div class="page_wrap">
+
+              <div class="page_header">
+
+                     <div class="content">
+
+                            <div class="text bold" id="first_name" style=" width: 70%;
+                            float: left;">
+                                   <!--ИМЯ-->
+                            </div>
+                            <div class="text bold" style=" margin-left: 70%; " onclick="openModalTools()">
+                                   <?xml version="1.0" ?><svg style="enable-background:new 0 0 16 16; width: 30px;
+    height: 30px; pointer-events: none;" version="1.1" viewBox="0 0 16 16" xml:space="preserve"
+                                          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                          <g id="Guide" />
+                                          <g id="Layer_2">
+                                                 <g>
+                                                        <path
+                                                               d="M6,6c0-0.93-0.64-1.71-1.5-1.93V2.5C4.5,2.22,4.28,2,4,2S3.5,2.22,3.5,2.5v1.57C2.64,4.29,2,5.07,2,6s0.64,1.71,1.5,1.93    v5.57C3.5,13.78,3.72,14,4,14s0.5-0.22,0.5-0.5V7.93C5.36,7.71,6,6.93,6,6z M4,7C3.45,7,3,6.55,3,6s0.45-1,1-1s1,0.45,1,1    S4.55,7,4,7z" />
+                                                        <path
+                                                               d="M8.5,9.07V2.5C8.5,2.22,8.28,2,8,2S7.5,2.22,7.5,2.5v6.57C6.64,9.29,6,10.07,6,11s0.64,1.71,1.5,1.93v0.57    C7.5,13.78,7.72,14,8,14s0.5-0.22,0.5-0.5v-0.57c0.86-0.22,1.5-1,1.5-1.93S9.36,9.29,8.5,9.07z M8,12c-0.55,0-1-0.45-1-1    s0.45-1,1-1s1,0.45,1,1S8.55,12,8,12z" />
+                                                        <path
+                                                               d="M14,5c0-0.93-0.64-1.71-1.5-1.93V2.5C12.5,2.22,12.28,2,12,2s-0.5,0.22-0.5,0.5v0.57C10.64,3.29,10,4.07,10,5    s0.64,1.71,1.5,1.93v6.57c0,0.28,0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5V6.93C13.36,6.71,14,5.93,14,5z M12,6c-0.55,0-1-0.45-1-1    s0.45-1,1-1s1,0.45,1,1S12.55,6,12,6z" />
+                                                 </g>
+                                          </g>
+                                   </svg></div>
+
+                     </div>
+
+              </div>
+
+
+
+              <div class="im_dialogs_col_wrap noselect" ng-controller="AppImDialogsController" my-dialogs=""
+                     ng-class="search.query.length > 0 ? 'im_dialogs_col_search' : ''">
+                     <div class="im_dialogs_panel">
+                            <a class="tg_head_btn dropdown-toggle" dropdown-toggle="" aria-haspopup="true"
+                                   aria-expanded="false">
+                                   <div class="icon-hamburger-wrap">
+                                          <span class="icon-bar"></span>
+                                          <span class="icon-bar"></span>
+                                          <span class="icon-bar"></span>
+                                   </div><i class="icon icon-tg-title"></i>
+                            </a>
+                            <div class="im_dialogs_search">
+                                   <input class="form-control im_dialogs_search_field no_outline ng-pristine ng-untouched ng-valid ng-empty"
+                                          type="search" placeholder="Search" ng-model="search.query" autocomplete="off"
+                                          spellcheck="false" data-ms-editor="true">
+                                   <a class="im_dialogs_search_clear tg_search_clear ng-hide" ng-click="searchClear()"
+                                          ng-show="search.query.length">
+                                          <i class="icon icon-search-clear"></i>
+                                   </a>
+                            </div>
+                     </div>
+
+                     <div my-dialogs-list="" class="im_dialogs_col" style="height: 814px;">
+                            <div class="im_dialogs_wrap nano has-scrollbar active-scrollbar">
+                                   <div class="im_dialogs_scrollable_wrap nano-content" tabindex="-1"
+                                          style="right: -15px;">
+
+                                          <!---->
+
+                                          <ul class="nav nav-pills nav-stacked">
+                                                 <!---->
+                                                 <!---->
+                                                 <li class="im_dialog_wrap" my-dialog="" dialog-message="dialogMessage"
+                                                        ng-repeat="dialogMessage in dialogs track by dialogMessage.peerID"
+                                                        ng-class="{active: curDialog.peerID == dialogMessage.peerID}"><a
+                                                               class="im_dialog"
+                                                               ng-mousedown="dialogSelect(dialogMessage.peerString, dialogMessage.unreadCount == -1 &amp;&amp; dialogMessage.mid)">
+
+                                                               <div class="im_dialog_meta pull-right text-right">
+                                                                      <div class="im_dialog_date"
+                                                                             ng-bind="dialogMessage.dateText">2:01 PM
+                                                                      </div>
+                                                                      <span class="im_dialog_badge badge"
+                                                                             ng-show="dialogMessage.unreadCount > 0 &amp;&amp; !dialogMessage.pFlags.out"
+                                                                             ng-bind="dialogMessage.unreadCount"
+                                                                             my-peer-muted="dialogMessage.peerID"
+                                                                             muted-class="im_dialog_badge_muted"
+                                                                             style="">3</span>
+                                                                      <i class="im_dialog_unread ng-hide"
+                                                                             ng-show="dialogMessage.pFlags.out &amp;&amp; dialogMessage.pFlags.unread"></i>
+                                                                      <i class="im_dialog_pinned ng-hide"
+                                                                             ng-show="dialogMessage.pinned &amp;&amp; !dialogMessage.unreadCount &amp;&amp; !dialogMessage.pFlags.unread"></i>
+                                                               </div>
+
+                                                               <i class="icon icon-select-tick"
+                                                                      ng-class="{dialog_selected: isSelected(dialogMessage.peerString)}"
+                                                                      ng-mousedown="dialogMultiSelect(dialogMessage.peerString, $event)"></i>
+
+                                                               <div class="im_dialog_photo pull-left peer_photo_init"
+                                                                      my-peer-photolink="::dialogMessage.peerID"
+                                                                      img-class="im_dialog_photo" watch="true"
+                                                                      for-dialog="!dialogMessage.foundInHistory"><img
+                                                                             class="im_dialog_photo"
+                                                                             src="blob:https://web.telegram.org/d24f01e3-b12d-4fd7-8bff-588e0cf1b63a">
+                                                               </div>
+
+                                                               <div class="im_dialog_message_wrap">
+
+                                                                      <div class="im_dialog_peer">
+                                                                             <span my-peer-link="dialogMessage.peerID"
+                                                                                    verified="true"
+                                                                                    for-dialog="!dialogMessage.foundInHistory">Creator
+                                                                                    Freelance | фриланс для
+                                                                                    каждого</span>
+                                                                      </div>
+
+                                                                      <div
+                                                                             ng-switch="dialogMessage.typing ? 'typing' : (!dialogMessage.unreadCount &amp;&amp; dialogMessage.draft ? 'draft' : (dialogMessage.deleted ? 'deleted' : 'message'))">
+
+                                                                             <!---->
+
+                                                                             <!---->
+
+                                                                             <!---->
+
+                                                                             <!---->
+                                                                             <div ng-switch-when="message"
+                                                                                    class="im_dialog_message" style="">
+                                                                                    <span
+                                                                                           ng-switch="dialogMessage.peerID > 0 || dialogMessage.fromID < 0">
+                                                                                           <!----><span
+                                                                                                  ng-switch-when="true">
+                                                                                                  <!---->
+                                                                                           </span>
+                                                                                           <!---->
+                                                                                           <!---->
+                                                                                    </span>
+
+                                                                                    <span
+                                                                                           my-short-message="dialogMessage">
+                                                                                           <!----><span
+                                                                                                  class="im_short_message_media"
+                                                                                                  ng-if="message.media"
+                                                                                                  ng-switch="message.media._">
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                                  <!---->
+                                                                                           </span>
+                                                                                           <!---->
+                                                                                           <!---->
+                                                                                           <!----><span
+                                                                                                  class="im_short_message_text"
+                                                                                                  ng-if="message.message.length &amp;&amp; (!message.media || message.media._ == 'messageMediaWebPage')"
+                                                                                                  ng-bind-html="message.richMessage">&ZeroWidthSpace;&ZeroWidthSpace;Расшифровать
+                                                                                                  аудиозапись Задача:
+                                                                                                  Расшифровать 1,20 часа
+                                                                                                  интервью на русском
+                                                                                                  языке. Срочно. Оплата:
+                                                                                                  500 Р</span>
+                                                                                           <!----></span>
+                                                                             </div>
+                                                                             <!---->
+                                                                      </div>
+
+                                                               </div>
+
+                                                        </a>
+                                                 </li>
+                                                 <!---->
+                                                 
+                                                 <!---->
+                                          </ul>
+
+                                          <div class="im_dialogs_contacts_wrap ng-hide" ng-show="myResults.length > 0">
+                                                 <h5 my-i18n="im_chat_contacts_title">Chats and contacts</h5>
+                                                 <ul class="nav nav-pills nav-stacked">
+                                                        <!---->
+                                                 </ul>
+                                          </div>
+
+                                          <div class="im_dialogs_contacts_wrap ng-hide" ng-show="foundPeers.length > 0">
+                                                 <h5 my-i18n="im_found_title">Global search</h5>
+                                                 <ul class="nav nav-pills nav-stacked">
+                                                        <!---->
+                                                 </ul>
+                                          </div>
+
+                                          <div class="im_dialogs_messages_wrap ng-hide"
+                                                 ng-show="foundMessages.length > 0">
+                                                 <h5 my-i18n="im_messages">Messages</h5>
+                                                 <ul class="nav nav-pills nav-stacked">
+                                                        <!---->
+                                                 </ul>
+                                          </div>
+
+                                   </div>
+                                   <div class="nano-pane" style="display: block;">
+                                          <div class="nano-slider"
+                                                 style="height: 528px; transform: translate(0px, 0px);"></div>
+                                   </div>
+                            </div>
+                     </div>
+              </div>
+              <div class="im_history_col_wrap noselect" ng-controller="AppImHistoryController" ng-class="{im_history_loaded: state.loaded}">
+                     <div class="im_history_not_selected_wrap" ng-switch="isEmpty.contacts &amp;&amp; isEmpty.dialogs">
+                            <!---->
+                            <!---->
+                            <div ng-switch-default="" class="im_history_not_selected vertical-aligned" my-vertical-position="0.35" padding="true" my-i18n="im_select_a_chat" style="padding-top: 327px; padding-bottom: 327px;">Please select a chat to start messaging</div>
+                            <!---->
+                     </div>
+              
+                     <div class="page_body chat_page">
+
+                            <div class="history">
+                                   
+                            </div>
+       
+                     </div>
+                     <div class="im_history_selected_wrap">
+                            <div my-history="" class="im_history_col">
+                                   <div my-peer-pinned-message-bar="curDialog.peerID" class="im_history_pinned_panel">
+                                          <!---->
+                                   </div>
+                                   <div class="im_history_wrap nano has-scrollbar" style="height: 882px;">
+                                          <div class="im_history_scrollable_wrap nano-content" tabindex="-1" style="right: -15px;">
+                                                 <div class="im_history_scrollable" style="">
+                                                        
+                                                        <div class="im_history_typing_wrap" ng-switch="historyState.skipped">
+                                                               <!---->
+                                                               <!---->
+                                                               <div ng-switch-default="" class="im_history_typing ng-hide" ng-show="historyState.typing.length > 0 &amp;&amp; !historyFilter.mediaType &amp;&amp; !state.empty" ng-switch="historyState.typing.length" my-i18n="">
+                                                                      <!----><span ng-switch-when="0"></span>
+                                                                      <!---->
+                                                                      <!---->
+                                                                      <!---->
+                                                                      <!---->
+                                                               </div>
+                                                               <!---->
+                                                        </div>
+                                                 </div>
+                                          </div>
+                                          <div class="nano-pane" style="display: none;">
+                                                 <div class="nano-slider" style="height: 20px; transform: translate(0px, 0px);"></div>
+                                          </div>
+                                   </div>
+                                   <div class="im_bottom_panel_wrap">
+                                          <div class="im_edit_panel_wrap clearfix ng-hide" ng-show="historyState.actions()" ng-switch="historyState.actions()" ng-class="historyState.channelActions !== false ? 'im_edit_small_panel_wrap' : ''">
+                                                 <div class="im_edit_panel_border"></div>
+                                                 <!---->
+                                                 <!---->
+                                                 <!---->
+                                          </div>
+                                          <div class="im_send_panel_wrap noselect" ng-show="!historyState.actions()">
+                                                 <div class="im_send_form_wrap1">
+                                                        <div class="im_send_form_wrap clearfix" ng-controller="AppImSendController" ng-class="{im_send_reply_form_wrap: draftMessage.replyToMsgID > 0}"> <a class="pull-right im_panel_peer_photo peer_photo_init" my-peer-photolink="historyPeer.id" img-class="im_panel_peer_photo" watch="true" for-dialog="true" ng-show="!draftMessage.isBroadcast">
+             <i class="icon im_panel_peer_online ng-hide" ng-show="historyPeer.id > 0 &amp;&amp; historyPeer.data.status._ == 'userStatusOnline'"></i>
+           </a>
+                                                               <a class="pull-left im_panel_own_photo peer_photo_init" my-peer-photolink="draftMessage.isBroadcast ? historyPeer.id : ownID" img-class="im_panel_own_photo" watch="true" ng-click="openSettings()" no-open="true"></a>
+                                                               <div my-send-form="" draft-message="draftMessage" mentions="mentions" commands="commands" reply-keyboard="historyState.replyKeyboard" class="im_record_supported">
+                                                                      <form class="im_send_form ng-valid im_send_form_empty ng-dirty ng-valid-parse" ng-class="{im_send_form_empty: !draftMessage.text.length, composer_progress_enabled: draftMessage.inlineProgress, im_voice_recording: voiceRecorder.recording, im_processing_recording: voiceRecorder.processing}">
+                                                                             <div class="im_send_form_inline_results" my-inline-results="inlineResults">
+                                                                                    <!---->
+                                                                                    <ul class="inline_results_wrap composer_dropdown">
+                                                                                           <!---->
+                                                                                    </ul>
+                                                                             </div>
+                                                                             <!---->
+                                                                             <!---->
+                                                                             <div class="im_send_field_wrap hasselect" ng-class="replyKeyboard._ == 'replyKeyboardMarkup' ? 'im_send_field_wrap_2ndbtn' : ''">
+                                                                                    <div class="im_inline_placeholder_wrap"><span class="im_inline_placeholder_prefix"></span><span class="im_inline_placeholder"></span></div> <a class="composer_emoji_insert_btn"><i class="icon icon-emoji"></i></a>
+                                                                                    <div class="composer_progress_icon_wrap">
+                                                                                           <div class="composer_progress_icon progress-arc-wrap progress-arc-intermediate" my-arc-progress="" width="22" stroke="2.5" style="width: 22px; height: 22px;">
+                                                                                                  <svg class="progress-arc" viewport="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                                                                                         <defs>
+                                                                                                                <linearGradient id="grad_intermediate3" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                                                                                       <stop offset="0%" class="stop0"></stop>
+                                                                                                                       <stop offset="60%" class="stop60"></stop>
+                                                                                                                       <stop offset="100%" class="stop100"></stop>
+                                                                                                                </linearGradient>
+                                                                                                         </defs>
+                                                                                                         <circle class="progress-arc-bar" cx="11" cy="11" r="9.75" style="stroke-width: 2.5; stroke-dasharray: 26.9549, 34.3062; stroke: url(&quot;#grad_intermediate3&quot;);"></circle>
+                                                                                                  </svg>
+                                                                                           </div>
+                                                                                    </div> <a class="composer_command_btn ng-hide" ng-show="!replyKeyboard &amp;&amp; commands.list.length > 0 &amp;&amp; (!draftMessage.text.length || draftMessage.text == '/')" ng-mousedown="draftMessage.toggleSlash($event)" ng-class="draftMessage.text[0] == '/' ? 'active' : ''"><i class="icon icon-slash"></i></a> <a class="composer_keyboard_btn active ng-hide" ng-show="replyKeyboard._ == 'replyKeyboardMarkup'" ng-mousedown="draftMessage.replyKeyboardToggle($event)" ng-class="!replyKeyboard.pFlags.hidden ? 'active' : ''"><i class="icon icon-keyboard"></i></a>
+                                                                                    <div class="im_send_dropbox_wrap" my-i18n="im_photos_drop_text">Drop photos here to send</div>
+                                                                                    <div class="im_voice_recorder_wrap">
+                                                                                           <div class="im_recorder_indicator"><i></i></div>
+                                                                                           <div class="im_recorder_time" ng-bind="voiceRecorder.duration | duration">0:00</div>
+                                                                                           <div class="im_recorder_label" ng-switch="voiceRecorder.processing">
+                                                                                                  <!---->
+                                                                                                  <!----><span ng-switch-default="">
+   <span class="im_recorder_label_hover" my-i18n="im_voice_recording_label">Release outside this form to cancel</span> <span class="im_recorder_label_hout" my-i18n="im_voice_recording_cancel_label">Release to cancel record</span> </span>
+                                                                                                  <!---->
+                                                                                           </div>
+                                                                                    </div>
+                                                                                    <div class="composer_rich_textarea" contenteditable="true" dir="auto" placeholder="Write a message..." style="left: -15px; width: calc(100% + 30px); padding-left: 17px; padding-right: 43px;"></div>
+                                                                                    <textarea ng-model="draftMessage.text" class="form-control im_message_field no_outline ng-untouched ng-valid ng-empty ng-dirty ng-valid-parse" dir="auto" ng-trim="false" style="display: none;"></textarea>
+                                                                             </div>
+                                                                             <div class="im_send_buttons_wrap clearfix">
+                                                                                    <button type="submit" class="btn btn-md im_submit im_submit_send" ng-class="draftMessage.type == 'edit' ? 'im_submit_edit' : 'im_submit_send'"> <span class="im_submit_send_label nocopy" my-i18n="im_submit_message" data-content="Send"></span> <span class="im_submit_edit_label nocopy" my-i18n="im_submit_edit_message" data-content="Save"></span> </button>
+                                                                                    <div class="im_attach pull-left">
+                                                                                           <input type="file" class="im_attach_input" size="28" multiple="multiple" title="Send file"> <i class="icon icon-paperclip"></i> </div>
+                                                                                    <div class="im_media_attach pull-left">
+                                                                                           <input type="file" class="im_media_attach_input" size="28" multiple="multiple" accept="image/*, video/*, audio/*" title="Send media"> <i class="icon icon-camera"></i> </div>
+                                                                                    <a class="im_record pull-left">
+                                                                                           <div class="im_record_bg"> <i class="icon icon-mic"></i> </div>
+                                                                                    </a>
+                                                                                    <div class="composer_emoji_panel"><a class="composer_emoji_btn" title=":joy:" data-code="1f602"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -440px -0px;"></i></a><a class="composer_emoji_btn" title=":kissing_heart:" data-code="1f618"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -140px -0px;"></i></a><a class="composer_emoji_btn" title=":heart:" data-code="2764"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -200px -120px;"></i></a><a class="composer_emoji_btn" title=":heart_eyes:" data-code="1f60d"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -120px -0px;"></i></a><a class="composer_emoji_btn" title=":blush:" data-code="1f60a"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -60px -0px;"></i></a><a class="composer_emoji_btn" title=":grin:" data-code="1f601"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -300px -0px;"></i></a><a class="composer_emoji_btn" title=":+1:" data-code="1f44d"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -480px -60px;"></i></a><a class="composer_emoji_btn" title=":relaxed:" data-code="263a"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -80px -0px;"></i></a><a class="composer_emoji_btn" title=":pensive:" data-code="1f614"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -320px -0px;"></i></a><a class="composer_emoji_btn" title=":smile:" data-code="1f604"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -0px -0px;"></i></a><a class="composer_emoji_btn" title=":sob:" data-code="1f62d"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -460px -0px;"></i></a><a class="composer_emoji_btn" title=":kiss:" data-code="1f48b"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -380px -120px;"></i></a><a class="composer_emoji_btn" title=":unamused:" data-code="1f612"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -360px -0px;"></i></a><a class="composer_emoji_btn" title=":flushed:" data-code="1f633"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -280px -0px;"></i></a><a class="composer_emoji_btn" title=":stuck_out_tongue_winking_eye:" data-code="1f61c"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -220px -0px;"></i></a><a class="composer_emoji_btn" title=":see_no_evil:" data-code="1f648"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -60px -60px;"></i></a><a class="composer_emoji_btn" title=":wink:" data-code="1f609"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -100px -0px;"></i></a><a class="composer_emoji_btn" title=":smiley:" data-code="1f603"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -20px -0px;"></i></a><a class="composer_emoji_btn" title=":cry:" data-code="1f622"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -420px -0px;"></i></a><a class="composer_emoji_btn" title=":stuck_out_tongue_closed_eyes:" data-code="1f61d"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -240px -0px;"></i></a><a class="composer_emoji_btn" title=":scream:" data-code="1f631"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -100px -20px;"></i></a><a class="composer_emoji_btn" title=":rage:" data-code="1f621"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -140px -20px;"></i></a><a class="composer_emoji_btn" title=":smirk:" data-code="1f60f"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -40px -40px;"></i></a><a class="composer_emoji_btn" title=":disappointed:" data-code="1f61e"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -380px -0px;"></i></a><a class="composer_emoji_btn" title=":sweat_smile:" data-code="1f605"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -0px -20px;"></i></a><a class="composer_emoji_btn" title=":kissing_closed_eyes:" data-code="1f61a"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -160px -0px;"></i></a><a class="composer_emoji_btn" title=":speak_no_evil:" data-code="1f64a"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -100px -60px;"></i></a><a class="composer_emoji_btn" title=":relieved:" data-code="1f60c"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -340px -0px;"></i></a><a class="composer_emoji_btn" title=":grinning:" data-code="1f600"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -40px -0px;"></i></a><a class="composer_emoji_btn" title=":yum:" data-code="1f60b"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -220px -20px;"></i></a><a class="composer_emoji_btn" title=":laughing:" data-code="1f606"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -200px -20px;"></i></a><a class="composer_emoji_btn" title=":ok_hand:" data-code="1f44c"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -520px -60px;"></i></a><a class="composer_emoji_btn" title=":neutral_face:" data-code="1f610"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -480px -20px;"></i></a><a class="composer_emoji_btn" title=":confused:" data-code="1f615"><i class="emoji emoji-w20 emoji-spritesheet-0" style="background-position: -500px -20px;"></i></a></div>
+                                                                             </div>
+                                                                             <!---->
+                                                                      </form>
+                                                               </div>
+                                                        </div>
+                                                 </div>
+                                          </div>
+                                   </div>
+                            </div>
+                     </div>
+              </div>
+              
+
+       </div>
+
+</body>
+
+</html>
