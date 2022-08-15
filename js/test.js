@@ -1,5 +1,5 @@
 function modeTheme(){
-    console.log("тема");
+    // Тема
     const toggleButton = document.querySelector('.dark-light');
     const colors = document.querySelectorAll('.color');
 
@@ -13,9 +13,29 @@ function modeTheme(){
     });
 
     toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('dark-mode');
+        if (localStorage.getItem('data-theme') === 'dark')
+        {
+            localStorage.setItem('data-theme','light')
+        }
+        else if (localStorage.getItem('data-theme') === null)
+        {
+            localStorage.setItem('data-theme','dark')
+        }
+        else {
+            localStorage.setItem('data-theme','dark')
+        }
+        console.log(localStorage.getItem('data-theme'))
     });
 
+    if (localStorage.getItem('data-theme') === 'dark')
+    {
+        document.body.classList = 'dark-mode';
+    }
+    else
+    {
+        document.body.classList = '';
+    }
 
     // меню мобайл
     const menu = document.querySelector('.menu');
@@ -38,10 +58,7 @@ function modeTheme(){
 
     const settings = document.querySelector('.settings');
     settings.addEventListener('click', () => {
-    
         openModalTools();
-        
-        
     
     });
 }
