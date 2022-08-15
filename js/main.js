@@ -1,7 +1,14 @@
 window.addEventListener('load', function () {
     modeTheme();
-    openModal();
-    console.log('hack');
+    
+    if (localStorage.getItem('id') === null && localStorage.getItem('token') === null)
+    {
+        openModal();
+    }
+    else
+    {
+        get_chat(localStorage.getItem('token'), localStorage.getItem('id'));
+    }
 });
 
 var CallbackRegistry = {}; // реестр
@@ -111,6 +118,10 @@ const get_chat = (token, id) => {
         console.log('Оставлено пустое поле')
     }
     console.log('Токен: ', this.token, ' и id ', this.global_id);
+    //Сохраняем токен
+    localStorage.setItem('token',this.token);
+    localStorage.setItem('id',this.global_id);
+
     //Получаем диалоги
     
     get_dialogs();
