@@ -89,8 +89,9 @@ pre {
     padding: 24px 24px 22px 82px;
 }
 .page_body {
-    padding-top: 64px;
-    width: 480px;
+    /*width: 480px;*/
+    padding-left: 10px;
+    padding-right: 10px;
     margin: 0 auto;
 }
 .page_about {
