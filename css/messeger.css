@@ -185,6 +185,18 @@
 	 fill: transparent;
 	 transition: 0.5s;
 }
+
+.menu {
+    width: 22px;
+    height: 22px;
+    color: var(--settings-icon-color);
+    flex-shrink: 0;
+}
+.menu svg {
+    width: 100%;
+    fill: transparent;
+    transition: 0.5s;
+}
  .user-profile {
 	 width: 40px;
 	 height: 40px;
@@ -677,5 +689,20 @@
 	}
 	 .search-bar input {
 		 padding-right: 10px;
+	}
+
+	
+
+    
+}
+
+@media (min-width: 780px) {
+	.menu {
+		display: none;
+	}
+
+	.conversation-area, .detail-area {
+		width: 340px !important;
+    	flex-shrink: 0 !important;
 	}
 }

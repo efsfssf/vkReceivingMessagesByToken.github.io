@@ -536,6 +536,12 @@ const get_new_chat = (new_id) => {
 
         count = 0;
 
+        var dialogs_list = document.querySelector('.conversation-area');
+        if (dialogs_list.style.display==="block")
+        {
+            dialogs_list.style.display="none";
+        }
+
         const myNode = document.querySelector(".history");
         myNode.innerHTML = '';
 
