@@ -1,7 +1,6 @@
 window.addEventListener('load', function () {
     modeTheme();
     openModal();
-    get_dialogs();
     console.log('hack');
 });
 
@@ -112,15 +111,37 @@ const get_chat = (token, id) => {
         console.log('Оставлено пустое поле')
     }
     console.log('Токен: ', this.token, ' и id ', this.global_id);
+    //Получаем диалоги
+    
+    get_dialogs();
+    //Получаем свою аву
+    users_current_get();
     // Обращаемся к апи истории сообщений
-    vk_api('messages.getHistory', this.token, this.global_id, null, 0)
+    vk_api('messages.getHistory', this.token, this.global_id, null, 0);
 };
 
 // Получаем имя собеседника
 const usersget = (result) => {
     console.log(result.response);
     document.getElementById('first_name').innerHTML = (result.response[0].first_name + ' ' + result.response[0].last_name);
+    document.querySelector('.detail-title').innerHTML = (result.response[0].first_name + ' ' + result.response[0].last_name);
+    console.log(result.response[0]);
+    document.querySelector('.photo_logo').innerHTML = ``;
+    document.querySelector('.photo_logo').innerHTML =`<img src="${result.response[0].photo_100}" style="margin: 0 auto;overflow: hidden;border-radius: 50%;"></img>`;
+    document.querySelector('.detail-subtitle').innerHTML = (result.response[0].status);
+    document.querySelector('.call').setAttribute('onclick',`window.open("https://vk.com/call?id${result.response[0].id}");`)
 };
+
+// Получаем свою аву
+const users_current_get = () => {
+    var script = document.createElement('SCRIPT');
+    script.src = `https://api.vk.com/method/users.get?access_token=${this.token}&fields=photo_100&count=20&v=5.131&callback=users_current_get_callback`;
+    document.getElementsByTagName("head")[0].appendChild(script);
+    document.getElementsByTagName("head")[0].removeChild(script);
+}
+const users_current_get_callback = (result) => {
+    document.querySelector('.user-profile').src=`${result.response[0].photo_100}`;
+}
 
 // Для апи запросов
 const vk_api = async (method, param1, param2, param3, param4) => {
@@ -221,7 +242,7 @@ async function  messagesgetHistory(result)  {
     var available_scroll = true;
     console.log(result);
     // Чекаем имя получателя
-    vk_api('users.get', token, this.global_id);
+    vk_api('users.get', token, this.global_id, 'photo_100,status');
     console.log(count);
     //console.log(await get_profile_info_for_id(309424939));
     var temp;
@@ -552,4 +573,4 @@ const get_new_chat = (new_id) => {
 }
 
 // для теста
-get_chat('vk1.a.Vww4WwDXotBzXTaKYAPMxyuyCTAKQrdWw9cX5clTnyq64BygLW7Vc50qjKqXtbPG9OeXfdAEwKM-nnDhdOrgsZuZdLdlpsXD4u_H7OAcBwGqLRYyiBrQORGlCBUAdtucVhNgyQNaTcbnWJCKxbTxgF9Jip6E8T495g5CrQ-g-XQPdNYFwQdYM6IM82l4dXKh', '470231617')
+//get_chat('', '470231617')

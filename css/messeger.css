@@ -96,7 +96,6 @@
 	 display: flex;
 	 flex-direction: column;
 	 background-color: var(--theme-bg-color);
-	 max-width: 1600px;
 	 height: 100vh;
 	 margin: 0 auto;
 	 overflow: hidden;
@@ -704,5 +703,6 @@
 	.conversation-area, .detail-area {
 		width: 340px !important;
     	flex-shrink: 0 !important;
+		display: block !important;
 	}
 }

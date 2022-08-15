@@ -35,5 +35,14 @@ function modeTheme(){
         
     
     });
+
+    const settings = document.querySelector('.settings');
+    settings.addEventListener('click', () => {
+    
+        openModalTools();
+        
+        
+    
+    });
 }
 
