@@ -651,6 +651,27 @@
 .dark-mode .app {
     color: white;
 }
+.dark-mode .mini_window {
+    background-color: var(--border-color);
+	color:white;
+}
+
+.dark-mode .mini_window h5, h1, h6{
+	color:white;
+}
+
+.dark-mode .mini_window input[type=button]{
+	background: --button-bg-color;
+    border-color: currentColor;
+}
+
+.dark-mode .mini_window input[type=text]{
+	background: var(--button-bg-color) !important;
+    border-color: currentColor;
+	border: 0px solid var(--button-color);
+	margin-bottom: 10px;
+	color: var(--button-color); /*цвет шрифта в обычном состоянии*/
+}
  .chat-area-group {
 	 flex-shrink: 0;
 	 display: flex;

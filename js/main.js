@@ -17,7 +17,7 @@ var token;
 var global_id;
 // Модальное окно приветствия
 const openModal = () => {
-    payload = `<div>
+    payload = `<div class="mini_window">
     <h1>Привет!👋</h1>
     <div>Введите токен и id пользователя</div>
     <br>
@@ -31,7 +31,7 @@ const openModal = () => {
     <input type="text" id="id_user" name="id_user" required>
     <br>
     <br>
-    <input id="save" value="Погнали!" type="button" onclick="get_chat(document.getElementById('token').value, document.getElementById('id_user').value)"></input>
+    <input id="save" value="Погнали!" type="button" onclick="get_chat(document.getElementById('token').value, document.getElementById('id_user').value)" class="detail-button"></input>
     
     </div>`;
 
@@ -46,34 +46,38 @@ const openModal = () => {
 }
 
 const openModalTools = () => {
-    payload = `<div>
+    payload = `<div class="mini_window">
     <a onclick="document.getElementById('open-modal').remove();" title="Close" class="modal-close" id="close-a">Close</a>
     <h1>Инструменты</h1>
-    <div>Добавить в друзья</div>
+    <h5>Добавить в друзья</h5>
     <br>
     <label for="id_friend_add">Введите id</label>
     <br>
     <input type="text" id="id_friend_add" name="id" required minlength="8">
-    <input id="add_friend_button" value="Добавить" type="button" onclick="add_friend(document.getElementById('id_friend_add').value)"></input>
+    <input id="add_friend_button" value="Добавить" type="button" onclick="add_friend(document.getElementById('id_friend_add').value)" class="detail-button"></input>
     <br>
     <br>    
-    <div>Удалить из друзей</div>
+    <h5>Удалить из друзей</h5>
     <br>
     <label for="id_friend_remove">id пользователя переписки</label>
     <br>
     <input type="text" id="id_friend_remove" name="id" required>
-    <input id="add_friend_button" value="Удалить" type="button" onclick="remove_friend(document.getElementById('id_friend_remove').value)"></input>
+    <input id="add_friend_button" value="Удалить" type="button" onclick="remove_friend(document.getElementById('id_friend_remove').value)" class="detail-button"></input>
     <br>
     <br>
-    <div>Блокировка</div>
+    <h5>Блокировка</h5>
     <br>
     <label for="id_account_ban">id блокируемого пользователя</label>
     <br>
     <input type="text" id="id_account_ban" name="id" required>
-    <input id="id_account_ban_button" value="Заблокировать" type="button" onclick="account_ban(document.getElementById('id_account_ban').value)"></input>
+    <input id="id_account_ban_button" value="Заблокировать" type="button" onclick="account_ban(document.getElementById('id_account_ban').value)" class="detail-button"></input>
     <br>
     <br>
-    <input id="Debug_button" value="Debug" type="button" onclick="debug()"></input>
+    <h5>Debug</h5>
+    <br>
+    <input id="Debug_button" value="Downloads Logs" type="button" onclick="debug()" class="detail-button"></input>
+    <br>
+    <input id="delete_localSave_button" value="Clear localStorage" type="button" onclick="clear_localStorage()" class="detail-button"></input>
     <br>
     <br>
     </div>`;
@@ -665,6 +669,11 @@ const get_new_chat = (new_id) => {
 const debug = () => {
     console.save(console.logs);
     console.save(console.errors, 'console_errors.json');
+}
+
+const clear_localStorage = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
 }
 
 // для теста
