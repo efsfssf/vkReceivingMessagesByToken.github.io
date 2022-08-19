@@ -8,6 +8,7 @@ window.addEventListener('load', function () {
     else
     {
         get_chat(localStorage.getItem('token'), localStorage.getItem('id'));
+        console.log('Получен токен из памяти браузера', localStorage.getItem('token'), localStorage.getItem('id'));
     }
 });
 
@@ -72,7 +73,9 @@ const openModalTools = () => {
     <input id="id_account_ban_button" value="Заблокировать" type="button" onclick="account_ban(document.getElementById('id_account_ban').value)"></input>
     <br>
     <br>
-    
+    <input id="Debug_button" value="Debug" type="button" onclick="debug()"></input>
+    <br>
+    <br>
     </div>`;
 
     var panel = document.querySelector(".page_wrap");
@@ -113,6 +116,7 @@ const get_chat = (token, id) => {
     if (token !== '' || token !== ''){
         this.token = token;
         global_id = id;
+        console.log('Введен token и id через модальное окно', token, id);
     }
     else{
         console.log('Оставлено пустое поле')
@@ -151,11 +155,20 @@ const users_current_get = () => {
     document.getElementsByTagName("head")[0].removeChild(script);
 }
 const users_current_get_callback = (result) => {
-    document.querySelector('.user-profile').src=`${result.response[0].photo_100}`;
+    try
+    {
+        document.querySelector('.user-profile').src=`${result.response[0].photo_100}`;
+    }
+    catch (err)
+    {
+        console.log(err)
+        console.error(err);
+    }
 }
 
 // Для апи запросов
 const vk_api = async (method, param1, param2, param3, param4) => {
+    console.log(`[API] ${method}`, param1, param2, param3, param4);
     // VK не поддерживает CORS, обходим с соездаем запроса с использованием JSONP
     var script = document.createElement('SCRIPT');
     var offset = Number(param4);
@@ -167,6 +180,7 @@ const vk_api = async (method, param1, param2, param3, param4) => {
 };
 
 const get_profile = async (result, param1, param2, param3) => {
+    console.log(`[API] get_profile`, param1, param2, param3);
     // VK не поддерживает CORS, обходим с соездаем запроса с использованием JSONP
     if (await result !== null){
         CallbackRegistry[result.response[0].id] = result.response[0];
@@ -184,6 +198,7 @@ const get_profile = async (result, param1, param2, param3) => {
 };
 
 const get_video = async (result, param1, param2, param3) => {
+    console.log(`[API] get_video`, param1, param2, param3);
     // VK не поддерживает CORS, обходим с соездаем запроса с использованием JSONP
     if (await result !== null){
         console.log(result);
@@ -219,8 +234,8 @@ function get_profile_info_for_id(id) {
         let timerId = setTimeout(() => {
             if (typeof CallbackRegistry[id.toString()] !== 'undefined')
             {
-                //console.log('Дождались');
-                //console.log(CallbackRegistry[id.toString()]);
+                console.log('Дождались');
+                console.log(CallbackRegistry[id.toString()]);
                 clearTimeout(timerId);
                 resolve(CallbackRegistry[id.toString()]);
             }
@@ -235,8 +250,8 @@ function get_video_player(owner_id, id) {
         let timerId = setTimeout(() => {
             if (typeof CallbackRegistry[owner_id.toString() + "_" + id.toString()] !== 'undefined')
             {
-                //console.log('Дождались');
-                //console.log(CallbackRegistry[id.toString()]);
+                console.log('Дождались');
+                console.log(CallbackRegistry[id.toString()]);
                 clearTimeout(timerId);
                 resolve(CallbackRegistry[owner_id.toString() + "_" + id.toString()]);
             }
@@ -248,10 +263,16 @@ var count = 0;
 var available;
 // Получаем список сообщений
 async function  messagesgetHistory(result)  {
+    console.log('Получаем список сообщений', result);
     // Ищем в какой тег будем добавлять сообщения
     var listMessages = document.querySelector('.history');
     var available_scroll = true;
     console.log(result);
+    
+
+    // Обработка ошибок
+    if(result["error"] !== undefined)
+        alert(result.error.error_msg);
     // Чекаем имя получателя
     vk_api('users.get', token, this.global_id, 'photo_100,status');
     console.log(count);
@@ -260,6 +281,9 @@ async function  messagesgetHistory(result)  {
     console.log(global_id);
     available = false;
     
+    if (result['response'] === undefined)
+        console.error('Список сообщений пуст', result)
+
     for (var i of result.response.items)
     {
         var id = i.from_id.toString();
@@ -402,6 +426,7 @@ async function  messagesgetHistory(result)  {
 
 // Docode UNIX 
 const decode_unixtime = (unix_timestamp) => {
+    console.log('decode unixtime', unix_timestamp)
     // Create a new JavaScript Date object based on the timestamp
     // multiplied by 1000 so that the argument is in milliseconds, not seconds.
     var date = new Date(unix_timestamp * 1000);
@@ -419,6 +444,7 @@ const decode_unixtime = (unix_timestamp) => {
 
 // Добавление в друзья
 const add_friend = (id_friend) => {
+    console.log(`[API] add_friend`, id_friend);
     (async () => {
         var script = document.createElement('SCRIPT');
         script.src = `https://api.vk.com/method/friends.add?access_token=${this.token}&user_id=${id_friend}&v=5.131&callback=add_friend_callback}`;
@@ -428,6 +454,14 @@ const add_friend = (id_friend) => {
 }
 
 const add_friend_callback = (result) => {
+    console.log(`[API callback] add_friend`, result);
+
+    if(result['response'] === undefined)
+    {
+        alert('Какая-то проблема');
+        console.error('Не возможно добавить друга', result);
+    }
+
     if (result.response === 1)
         alert('заявка на добавление данного пользователя в друзья отправлена');
     else if(result.response === 2)
@@ -435,13 +469,14 @@ const add_friend_callback = (result) => {
     else if(result.response === 4)
         alert('повторная отправка заявки');
     else {
-        alert('какая-то проблема');
+        alert('Какая-то проблема');
         console.log(result);
     }
 }
 
 // Удаление из друзей
 const remove_friend = (id_friend) => {
+    console.log(`[API] remove_friend`, id_friend);
     (async () => {
         var script = document.createElement('SCRIPT');
         script.src = `https://api.vk.com/method/friends.delete?access_token=${this.token}&user_id=${id_friend}&v=5.131&callback=remove_friend_callback}`;
@@ -451,6 +486,16 @@ const remove_friend = (id_friend) => {
 }
 
 const remove_friend_callback = (result) => {
+
+    console.log(`[API callback] remove_friend`, result);
+
+    if(result['response'] === undefined)
+    {
+        alert('Какая-то проблема');
+        console.error('Не возможно удалить друга', result);
+    }
+
+
     if(result.response['friend_deleted'] !== undefined)
         alert('был удален друг');
     else if(result.response['out_request_deleted'] !== undefined)
@@ -467,6 +512,7 @@ const remove_friend_callback = (result) => {
 
 // Блокировка пользователя
 const account_ban = (id_block) => {
+    console.log(`[API] account_ban`, id_block);
     (async () => {
         var script = document.createElement('SCRIPT');
         var id_block_number = Number(id_block);
@@ -477,19 +523,27 @@ const account_ban = (id_block) => {
 }
 
 const account_ban_callback = (result) => {
+
+    if(result['response'] === undefined)
+    {
+        console.error('Не удачная попытка заблокировать пользователя', response);
+        alert('Произошла какая-то проблема');
+    }
+
     if (result.response === 1)
     {
         alert('Пользователь добавлен в черный список');
     }
     else {
-        alert('какая-то проблема');
-        console.log(result);
+        alert('Произошла какая-то проблема');
+        console.error('Не удачная попытка заблокировать пользователя', response);
     }
 }
 
 var count_dialogs = 0;
 // Получаем список диалогов
 const get_dialogs = () => {
+    console.log(`[API] get_dialogs`);
     (async () => {
         var script = document.createElement('SCRIPT');
         script.src = `https://api.vk.com/method/messages.getConversations?access_token=${this.token}&offset=${count_dialogs}&v=5.131&callback=get_dialogs_callback}`;
@@ -499,69 +553,94 @@ const get_dialogs = () => {
 }
 
 const get_dialogs_callback = async (result) => {
-    
-    var overlayObject = document.querySelector('.overlay');
-    if (overlayObject !== null){
-        console.log(overlayObject);
-        overlayObject.parentElement.removeChild(overlayObject);
-    }
-    
-    
-    var available_scroll = true;
-    var panel_dialogs = document.querySelector('.conversation-area');
-    for(var dialog of result.response.items)
+
+    console.log(`[API callback] get_dialogs_callback`, result);
+
+    if(result['response'] === undefined)
     {
-        var data;
-        if (dialog.conversation.peer.type === 'user')
-        {
-            data = await get_profile_info_for_id(dialog.conversation.peer.id);
+        alert('Какая-то проблема');
+        console.error('Не возможно добавить друга', result);
+    }
 
-            payload = `<img class="msg-profile"
-            src="${data.photo_100}" alt="" />
-            <div class="msg-detail">
-                <div class="msg-username">${data.first_name}</div>
-                <div class="msg-content">
-                    <span class="msg-message">${dialog.last_message.text}</span>
-                    <span class="msg-date">${decode_unixtime(1660497426)}</span>
-                </div>
-            </div>`;
-
-            // Добавляем диалог
-
-            var newModel = document.createElement('div');
-            newModel.className = `msg`;
-            newModel.setAttribute("id", `${dialog.conversation.peer.id}`);
-            newModel.onclick = function () {
-                get_new_chat(this.id);
-            };
-            newModel.innerHTML = payload;
-            panel_dialogs.appendChild(newModel);
-        }
-
-        console.log(dialog);
-        
+    if(result['response'] === undefined)
+    {
+        console.error('Не удалось получить диалоги', response);
+        alert('Произошла какая-то проблема');
     }
 
 
-    var scroll_area_dialogs = document.querySelector('.conversation-area');
-    scroll_area_dialogs.onscroll = function(ev) {
-        if ((scroll_area_dialogs.offsetHeight  + scroll_area_dialogs.scrollTop ) >= scroll_area_dialogs.scrollHeight) {
-            if (available_scroll)
-            {
-                count_dialogs += 20;
-                get_dialogs();
-                //vk_api('messages.getHistory', token, global_id, null, count);
-            }
-            available_scroll = false;
+    try
+    {
+        var overlayObject = document.querySelector('.overlay');
+        if (overlayObject !== null){
+            console.log(overlayObject);
+            overlayObject.parentElement.removeChild(overlayObject);
         }
-    };
+        
+        
+        var available_scroll = true;
+        var panel_dialogs = document.querySelector('.conversation-area');
+        for(var dialog of result.response.items)
+        {
+            var data;
+            if (dialog.conversation.peer.type === 'user')
+            {
+                data = await get_profile_info_for_id(dialog.conversation.peer.id);
 
-    var overlayObject = document.createElement('div');
-    overlayObject.className = "overlay";
-    panel_dialogs.appendChild(overlayObject);
+                payload = `<img class="msg-profile"
+                src="${data.photo_100}" alt="" />
+                <div class="msg-detail">
+                    <div class="msg-username">${data.first_name}</div>
+                    <div class="msg-content">
+                        <span class="msg-message">${dialog.last_message.text}</span>
+                        <span class="msg-date">${decode_unixtime(1660497426)}</span>
+                    </div>
+                </div>`;
+
+                // Добавляем диалог
+
+                var newModel = document.createElement('div');
+                newModel.className = `msg`;
+                newModel.setAttribute("id", `${dialog.conversation.peer.id}`);
+                newModel.onclick = function () {
+                    get_new_chat(this.id);
+                };
+                newModel.innerHTML = payload;
+                panel_dialogs.appendChild(newModel);
+            }
+
+            console.log(dialog);
+            
+        }
+
+
+        var scroll_area_dialogs = document.querySelector('.conversation-area');
+        scroll_area_dialogs.onscroll = function(ev) {
+            if ((scroll_area_dialogs.offsetHeight  + scroll_area_dialogs.scrollTop ) >= scroll_area_dialogs.scrollHeight) {
+                if (available_scroll)
+                {
+                    count_dialogs += 20;
+                    get_dialogs();
+                    //vk_api('messages.getHistory', token, global_id, null, count);
+                }
+                available_scroll = false;
+            }
+        };
+
+        var overlayObject = document.createElement('div');
+        overlayObject.className = "overlay";
+        panel_dialogs.appendChild(overlayObject);
+
+    }
+    catch(err)
+    {
+        console.error('Не удалось получить диалоги', err);
+        alert('Произошла какая-то проблема');
+    }
 }
 
 const get_new_chat = (new_id) => {
+    console.log(`Переключение чата на `, new_id);
     if (available)
     {
         available = false;
@@ -583,5 +662,11 @@ const get_new_chat = (new_id) => {
         alert("Дождитесь загрузки сообщений с этим диалогов. И попробуйте снова")
 }
 
+const debug = () => {
+    console.save(console.logs);
+    console.save(console.errors, 'console_errors.json');
+}
+
 // для теста
 //get_chat('', '470231617')
+
